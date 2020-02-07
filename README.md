@@ -1,24 +1,14 @@
 # irregular_verbs
 
 ## Project setup
-```
-yarn install
-```
 
-### Compiles and hot-reloads for development
-```
+'''
+vue create irregular_verbs
+
+## Custom vue.js config
+
+cd irregular_verbs
+
 yarn serve
-```
 
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Now we start creating aut project 
