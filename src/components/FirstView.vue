@@ -1,17 +1,16 @@
 <template>
   <div class="conteiner">
     <h1 class="firstView_title">Irregular verbs</h1>
-      <div class="buttonConteinerOne">
-        <div class="buttonConteinerOne_btn"></div>
-        <div class="buttonConteinerOne_btn"></div>
-        <div class="buttonConteinerOne_btn"></div>
-        <div class="buttonConteinerOne_btn"></div>
+      <div v-on:click="levelMenu($event)" class="buttonConteinerOne">
+        <div class="buttonConteinerOne_btn">A2</div>
+        <div class="buttonConteinerOne_btn">B1</div>
+        <div class="buttonConteinerOne_btn">B2</div>
+        <div class="buttonConteinerOne_btn">C1</div>
       </div>
-      <div class="buttonConteinerOne">
-        <div class="buttonConteinerOne_btn"></div>
-        <div class="buttonConteinerOne_btn"></div>
-        <div class="buttonConteinerOne_btn"></div>
-        <div class="buttonConteinerOne_btn"></div>
+      <div v-on:click="typeMenu($event)" class="buttonConteinerOne">
+        <div class="buttonConteinerOne_btn">Short</div>
+        <div class="buttonConteinerOne_btn">Long</div>
+        <div class="buttonConteinerOne_btn">Random</div>
       </div>
     <div class="startBtn" :class="{isActive: !buttonActive}">
         <h2>Let's do it!</h2>
@@ -26,8 +25,46 @@ export default {
   name: 'FirstView',
   data() {
     return {
-      buttonActive: false,
+      // eslint-disable-next-line no-self-compare
+      buttonOneActive: false,
+      buttonTwoActive: false,
+      buttonActive: (this.buttonOneActive && this.buttonTwoActive),
     };
+  },
+  computed: {
+    allLevelElement() {
+      return document.querySelectorAll('.buttonConteinerOne_btn');
+    },
+  },
+  methods: {
+    levelMenu(event) {
+      this.$store.state.userChoice.level = event.target.innerHTML;
+      this.buttonOneActive = true;
+      this.colorChange();
+    },
+    typeMenu(event) {
+      this.$store.state.userChoice.testType = event.target.innerHTML;
+      this.buttonTwoActive = true;
+      this.colorChange();
+    },
+    colorChange() {
+      this.buttonActive = (this.buttonOneActive && this.buttonTwoActive);
+      console.log(this.buttonActive);
+      const allEle = this.allLevelElement;
+      allEle.forEach((element) => {
+        // eslint-disable-next-line max-len
+        if (element.innerHTML === this.$store.state.userChoice.level) {
+          // eslint-disable-next-line no-param-reassign
+          element.style.backgroundColor = 'rgba(172, 127, 179, 0.699)';
+        } else if (element.innerHTML === this.$store.state.userChoice.testType) {
+          // eslint-disable-next-line no-param-reassign
+          element.style.backgroundColor = 'rgba(172, 127, 179, 0.699)';
+        } else {
+          // eslint-disable-next-line no-param-reassign
+          element.style.backgroundColor = 'rgba(237, 200, 243, 0.699)';
+        }
+      });
+    },
   },
 };
 </script>
@@ -35,7 +72,7 @@ export default {
 .conteiner{
   height: 110vh;
   width: 100%;
-  background-color: rgba(172, 127, 179, 0.699);
+  background-color: rgba(237, 200, 243, 0.699);
 }
   .firstView_title{
     text-align: center;
@@ -61,6 +98,12 @@ export default {
       height: 40px;
       margin: 6px 0;
       border-radius: 6px;
+      font-size: 30px;
+      text-align: center;
+      line-height: 40px;
+      &:focus{
+        color: pink;
+      }
     }
     @media (min-width: 500px) {
       width: 40%;
@@ -80,6 +123,9 @@ export default {
     @media (min-width: 500px) {
       width: 25%;
     }
+    &:focus{
+        color: pink;
+      }
   }
  .isActive{
    opacity: 0.45;
