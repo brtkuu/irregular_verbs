@@ -1,4 +1,5 @@
 <template>
+<transition name="firstTransition">
   <div class="conteiner">
     <h1 class="firstView_title">Irregular verbs</h1>
       <div v-on:click="levelMenu($event)" class="buttonConteinerOne">
@@ -12,15 +13,18 @@
         <div class="buttonConteinerOne_btn">Long</div>
         <div class="buttonConteinerOne_btn">Random</div>
       </div>
-    <div class="startBtn" :class="{isActive: !buttonActive}">
+    <div @click="start()" class="startBtn" :class="{isActive: !buttonActive}">
         <h2>Let's do it!</h2>
     </div>
     <div class="startBtn">
         <h2>Show all</h2>
     </div>
   </div>
+</transition>
 </template>
 <script>
+import Swal from 'sweetalert2';
+
 export default {
   name: 'FirstView',
   data() {
@@ -65,12 +69,27 @@ export default {
         }
       });
     },
+    start() {
+      if (this.buttonActive) {
+        this.$store.state.globalFlags.firstView = false;
+        setTimeout(() => {
+          this.$store.state.globalFlags.loading = true;
+        }, 600);
+      } else {
+        Swal.fire({
+          title: 'Error!',
+          text: 'You have to choose level and test type',
+          icon: 'error',
+        });
+      }
+    },
   },
 };
 </script>
 <style lang="scss" scoped>
 .conteiner{
-  height: 110vh;
+  border: 2px solid black;
+  height: 120vh;
   width: 100%;
   background-color: rgba(237, 200, 243, 0.699);
 }
@@ -93,6 +112,7 @@ export default {
     border-radius: 6px;
     box-shadow: 0 3px 10px 4px rgba(0, 0, 0, 0.212);
     &_btn{
+      cursor: pointer;
       flex-basis: 20%;
       border: 1px solid black;
       height: 40px;
@@ -110,6 +130,7 @@ export default {
     }
   }
   .startBtn{
+    cursor: pointer;
     position: relative;
     margin-left: auto;
     margin-right: auto;
@@ -130,4 +151,12 @@ export default {
  .isActive{
    opacity: 0.45;
  }
+ .firstTransition-enter-active, .firstTransition-leave-active {
+  transition: all 0.8s;;
+  overflow: hidden;
+}
+.firstTransition-enter, .firstTransition-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  height: 0;
+  border: 0;
+}
 </style>

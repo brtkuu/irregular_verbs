@@ -1,12 +1,18 @@
 <template>
-    <first-view v-if="firstFlag"></first-view>
+<div>
+    <first-view v-if="$store.state.globalFlags.firstView"></first-view>
+    <transition name='slide-fade'>
+    <loading-icon v-if="$store.state.globalFlags.loading"></loading-icon>
+    </transition>
+</div>
 </template>
 <script>
 import FirstView from './components/FirstView.vue';
+import LoadingIcon from './components/Loading.vue';
 
 export default {
   components: {
-    FirstView,
+    FirstView, LoadingIcon,
   },
   data() {
     return {
@@ -16,8 +22,20 @@ export default {
 };
 </script>
 <style lang="scss">
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap');
 *{
   margin: 0;
   padding: 0;
+  font-family: 'Roboto Mono', monospace;
+}
+.slide-fade-enter-active {
+  transition: all 1s ease;
+}
+.slide-fade-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to{
+  transform: translateY(15px);
+  opacity: 0;
 }
 </style>
