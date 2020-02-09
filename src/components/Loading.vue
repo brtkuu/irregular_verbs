@@ -1,6 +1,5 @@
 <template>
 <div class="conteiner">
-    <h1 class='title' >Wait, we're just generating your test!</h1>
 <div class="lds-ellipsis">
     <div></div>
     <div></div>
@@ -15,10 +14,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.title{
-    text-align: center;
-    margin: 15px 0px 5px 0;
-}
 .lds-ellipsis {
   width: 80px;
   height: 80px;

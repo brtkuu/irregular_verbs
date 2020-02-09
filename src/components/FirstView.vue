@@ -24,6 +24,7 @@
 </template>
 <script>
 import Swal from 'sweetalert2';
+import axios from 'axios';
 
 export default {
   name: 'FirstView',
@@ -69,12 +70,23 @@ export default {
         }
       });
     },
-    start() {
+    async start() {
       if (this.buttonActive) {
         this.$store.state.globalFlags.firstView = false;
         setTimeout(() => {
           this.$store.state.globalFlags.loading = true;
         }, 600);
+        // eslint-disable-next-line arrow-body-style
+        await axios.get('https://sheet.best/api/sheets/d44602f4-c63f-468c-af8b-dac26d1d7f82?_limit=10').then((response) => {
+          this.$store.state.testData.finalData = response.data;
+          console.log(this.$store.state.testData.finalData);
+          setTimeout(() => {
+            this.$store.state.globalFlags.loading = false;
+            setTimeout(() => {
+              this.$store.state.globalFlags.testView = true;
+            }, 300);
+          }, 600);
+        });
       } else {
         Swal.fire({
           title: 'Error!',

@@ -4,15 +4,18 @@
     <transition name='slide-fade'>
     <loading-icon v-if="$store.state.globalFlags.loading"></loading-icon>
     </transition>
+    <test-view v-if="($store.state.globalFlags.testView)" >
+    </test-view>
 </div>
 </template>
 <script>
 import FirstView from './components/FirstView.vue';
 import LoadingIcon from './components/Loading.vue';
+import TestView from './components/TestView.vue';
 
 export default {
   components: {
-    FirstView, LoadingIcon,
+    FirstView, LoadingIcon, TestView,
   },
   data() {
     return {
@@ -32,7 +35,7 @@ export default {
   transition: all 1s ease;
 }
 .slide-fade-leave-active {
-  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  transition: all .1s cubic-bezier(1.0, 0.5, 0.8, 1.0);
 }
 .slide-fade-enter, .slide-fade-leave-to{
   transform: translateY(15px);
