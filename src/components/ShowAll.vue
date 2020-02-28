@@ -1,8 +1,8 @@
 <template>
 <div>
-<back-button></back-button>
+    <back-button></back-button>
     <div class='testConteiner'>
-        <h1 class="title">GOOD LUCK!</h1>
+        <h1 class="title">All Verbs</h1>
     <div class="titles">
         <h2>Present</h2>
         <div class='vl'></div>
@@ -10,15 +10,8 @@
         <div class='vl'></div>
         <h2>Past Participle</h2>
     </div>
-    <div  v-if="this.$store.state.globalFlags.showAll">
     <div v-for="(item, index) in verbs" v-bind:key="index">
       <test-element v-bind:element='item'></test-element>
-    </div>
-    </div>
-    <div  v-if="!this.$store.state.globalFlags.showAll">
-    <div v-for="(item, index) in verbs" v-bind:key="index">
-      <test-element v-bind:element='item'></test-element>
-    </div>
     </div>
     </div>
 </div>
@@ -28,7 +21,7 @@ import TestElement from './TestElement.vue';
 import BackButton from './BackButton.vue';
 
 export default {
-  name: 'TestView',
+  name: 'ShowAll',
   components: {
     TestElement, BackButton,
   },
@@ -53,7 +46,7 @@ h2{
 .testConteiner{
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 15vh 10vh;
+    grid-template-rows: repeat(2, 10vh);
     height: 120vh;
     width: 100%;
     grid-gap: 10p
@@ -61,9 +54,8 @@ h2{
 .title{
     grid-column: 1/-1;
     text-align: center;
-    // line-height: 12vh;
+    line-height: 12vh;
     font-size: 50px;
-    margin-top: 10px;
 }
 input{
     width: 90%;

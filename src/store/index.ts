@@ -16,6 +16,9 @@ export default new Vuex.Store({
       firstView: true, // flase is just for tests
       loading: false, // true is just for tests
       testView: false,
+      allView: false,
+      showAll: false,
+      test: false,
     },
   },
 });

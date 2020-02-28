@@ -16,7 +16,7 @@
     <div @click="start()" class="startBtn" :class="{isActive: !buttonActive}">
         <h2>Let's do it!</h2>
     </div>
-    <div class="startBtn">
+    <div class="startBtn" @click="showAll()">
         <h2>Show all</h2>
     </div>
   </div>
@@ -42,8 +42,28 @@ export default {
     },
   },
   methods: {
+    async showAll() {
+      this.$store.state.globalFlags.showAll = true;
+      this.$store.state.globalFlags.firstView = false;
+      setTimeout(() => {
+        this.$store.state.globalFlags.loading = true;
+      }, 600);
+      console.log(this.$store.state.userChoice.level);
+      // eslint-disable-next-line arrow-body-style
+      await axios.get('https://sheet.best/api/sheets/d44602f4-c63f-468c-af8b-dac26d1d7f82').then((response) => {
+        this.$store.state.testData.finalData = response.data;
+        console.log(this.$store.state.testData.finalData);
+        setTimeout(() => {
+          this.$store.state.globalFlags.loading = false;
+          setTimeout(() => {
+            this.$store.state.globalFlags.allView = true;
+          }, 300);
+        }, 600);
+      });
+    },
     levelMenu(event) {
       this.$store.state.userChoice.level = event.target.innerHTML;
+      console.log(this.$store.state.userChoice.level);
       this.buttonOneActive = true;
       this.colorChange();
     },
@@ -77,7 +97,7 @@ export default {
           this.$store.state.globalFlags.loading = true;
         }, 600);
         // eslint-disable-next-line arrow-body-style
-        await axios.get('https://sheet.best/api/sheets/d44602f4-c63f-468c-af8b-dac26d1d7f82?_limit=10').then((response) => {
+        await axios.get(`https://sheet.best/api/sheets/d44602f4-c63f-468c-af8b-dac26d1d7f82/Level/${this.$store.state.userChoice.level}`).then((response) => {
           this.$store.state.testData.finalData = response.data;
           console.log(this.$store.state.testData.finalData);
           setTimeout(() => {
@@ -164,7 +184,7 @@ export default {
    opacity: 0.45;
  }
  .firstTransition-enter-active, .firstTransition-leave-active {
-  transition: all 0.8s;;
+  transition: all 0.8s ease-in-out;
   overflow: hidden;
 }
 .firstTransition-enter, .firstTransition-leave-to /* .fade-leave-active below version 2.1.8 */ {
