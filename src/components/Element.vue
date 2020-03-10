@@ -1,7 +1,6 @@
 <template>
-  <div class="element"><h3 id="testElement">{{ element.Present }}</h3>
-  <h3 id="testElement">{{ element.Past }}</h3>
-  <h3 id="testElement">{{ element.Past_Participle }}</h3></div>
+  <div class="element"><h3>{{ element.Present }}</h3><h3>{{ element.Past }}</h3>
+  <h3>{{ element.Past_Participle }}</h3></div>
 </template>
 <script>
 export default {

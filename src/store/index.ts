@@ -10,7 +10,11 @@ export default new Vuex.Store({
       testType: '',
     },
     testData: {
+      response: undefined,
       finalData: undefined,
+      checkData: [],
+      answers: [],
+      counter: 0,
     },
     globalFlags: {
       firstView: true, // flase is just for tests

@@ -10,36 +10,63 @@
         <div class='vl'></div>
         <h2>Past Participle</h2>
     </div>
-    <div  v-if="this.$store.state.globalFlags.showAll">
-    <div v-for="(item, index) in verbs" v-bind:key="index">
-      <test-element v-bind:element='item'></test-element>
+    <test v-if="!checkScore"></test>
+    <section v-if="checkScore">
+    <div  v-for="(item, index) in verbs" :key="index">
+        <element-score v-bind:element="item"></element-score>
     </div>
-    </div>
-    <div  v-if="!this.$store.state.globalFlags.showAll">
-    <div v-for="(item, index) in verbs" v-bind:key="index">
-      <test-element v-bind:element='item'></test-element>
-    </div>
-    </div>
+    </section>
+    <div @click="checkTest()" class='checkBtn'>Check!</div>
     </div>
 </div>
 </template>
 <script>
-import TestElement from './TestElement.vue';
 import BackButton from './BackButton.vue';
+import Test from './Test.vue';
+import ElementScore from './ElementScore.vue';
 
 export default {
   name: 'TestView',
   components: {
-    TestElement, BackButton,
+    BackButton, Test, ElementScore,
   },
   data() {
     return {
       verbs: this.$store.state.testData.finalData,
+      checkScore: false,
     };
+  },
+  methods: {
+    checkTest() {
+      this.checkScore = true;
+      const inputTest = document.querySelectorAll('.inputTest');
+      const answers = [];
+      inputTest.forEach((row, index) => {
+        answers.push(row.value);
+      });
+      const allElements = document.querySelectorAll('input');
+      allElements.forEach((element) => {
+        this.$store.state.testData.answers.push(element.value);
+      });
+    },
   },
 };
 </script>
 <style lang="scss" scoped>
+.checkBtn{
+    cursor: pointer;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    margin-top: 0px;
+    font-size: 30px;
+    border: 1px solid black;
+    border-radius: 4px;
+    width: 50%;
+    height: 40px;
+    background-color: rgba(65, 65, 65, 0.411);
+}
 .vl{
     height: 100%;
     border-right: 1px solid black;

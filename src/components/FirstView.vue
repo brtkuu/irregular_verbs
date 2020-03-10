@@ -42,17 +42,17 @@ export default {
     },
   },
   methods: {
-    async showAll() {
+    async showAll() { // start rendering all verbs
       this.$store.state.globalFlags.showAll = true;
       this.$store.state.globalFlags.firstView = false;
       setTimeout(() => {
         this.$store.state.globalFlags.loading = true;
       }, 600);
-      console.log(this.$store.state.userChoice.level);
+      // console.log(this.$store.state.userChoice.level);
       // eslint-disable-next-line arrow-body-style
       await axios.get('https://sheet.best/api/sheets/d44602f4-c63f-468c-af8b-dac26d1d7f82').then((response) => {
         this.$store.state.testData.finalData = response.data;
-        console.log(this.$store.state.testData.finalData);
+        // console.log(this.$store.state.testData.finalData);
         setTimeout(() => {
           this.$store.state.globalFlags.loading = false;
           setTimeout(() => {
@@ -63,7 +63,7 @@ export default {
     },
     levelMenu(event) {
       this.$store.state.userChoice.level = event.target.innerHTML;
-      console.log(this.$store.state.userChoice.level);
+      // console.log(this.$store.state.userChoice.level);
       this.buttonOneActive = true;
       this.colorChange();
     },
@@ -74,7 +74,7 @@ export default {
     },
     colorChange() {
       this.buttonActive = (this.buttonOneActive && this.buttonTwoActive);
-      console.log(this.buttonActive);
+      // console.log(this.buttonActive);
       const allEle = this.allLevelElement;
       allEle.forEach((element) => {
         // eslint-disable-next-line max-len
@@ -90,7 +90,7 @@ export default {
         }
       });
     },
-    async start() {
+    async start() { // start test rendering
       if (this.buttonActive) {
         this.$store.state.globalFlags.firstView = false;
         setTimeout(() => {
@@ -98,8 +98,88 @@ export default {
         }, 600);
         // eslint-disable-next-line arrow-body-style
         await axios.get(`https://sheet.best/api/sheets/d44602f4-c63f-468c-af8b-dac26d1d7f82/Level/${this.$store.state.userChoice.level}`).then((response) => {
-          this.$store.state.testData.finalData = response.data;
-          console.log(this.$store.state.testData.finalData);
+          let result = response.data;
+          const arraySize = result.length;
+          const tempResult = [];
+          if (this.$store.state.userChoice.testType === 'Random' || this.$store.state.userChoice.testType === 'Long') {
+            for (let i = 0; i < 10;) { // draw without repeat
+              // console.log('losowanie');
+              const random = Math.floor(Math.random() * arraySize);
+              if (!tempResult.includes(result[random])) {
+                tempResult.push(result[random]);
+                i += 1;
+              }
+            }
+          } else {
+            for (let i = 0; i < 5;) {
+              // console.log('losowanie');
+              const random = Math.floor(Math.random() * arraySize);
+              if (!tempResult.includes(result[random])) {
+                tempResult.push(result[random]);
+                i += 1;
+              }
+            }
+          }
+          result = tempResult;
+          this.$store.state.testData.checkData = [];
+          // console.log(result);
+          // console.log(this.$store.state.userChoice.testType);
+          if (this.$store.state.userChoice.testType === 'Random') {
+            // eslint-disable-next-line consistent-return
+            result.forEach((row, index) => {
+              const element = row;
+              const random = Math.floor(Math.random() * 3 + 1);
+              switch (random) {
+                case 1:
+                  this.$store.state.testData.checkData.push(result[index].Past);
+                  this.$store.state.testData.checkData.push(result[index].Past_Participle);
+                  // eslint-disable-next-line no-param-reassign
+                  result[index].Past = '';
+                  // eslint-disable-next-line no-param-reassign
+                  result[index].Past_Participle = '';
+                  // console.log(result);
+                  break;
+                case 2:
+                  this.$store.state.testData.checkData.push(result[index].Present);
+                  this.$store.state.testData.checkData.push(result[index].Past_Participle);
+                  // eslint-disable-next-line no-param-reassign
+                  result[index].Present = '';
+                  // eslint-disable-next-line no-param-reassign
+                  result[index].Past_Participle = '';
+                  // console.log(result);
+                  break;
+                case 3:
+                  this.$store.state.testData.checkData.push(result[index].Past);
+                  this.$store.state.testData.checkData.push(result[index].Present);
+                  // eslint-disable-next-line no-param-reassign
+                  result[index].Past = '';
+                  // eslint-disable-next-line no-param-reassign
+                  result[index].Present = '';
+                  // console.log(result);
+                  break;
+                default:
+                  // console.log(random);
+                  // console.log('Somethings goes wrong :/');
+              }
+              // console.log(this.$store.state.testData.checkData);
+            });
+          }
+          if (this.$store.state.userChoice.testType === 'Long' || this.$store.state.userChoice.testType === 'Short') {
+            // eslint-disable-next-line consistent-return
+            result.forEach((row, index) => {
+              const element = row;
+              this.$store.state.testData.checkData.push(result[index].Past);
+              this.$store.state.testData.checkData.push(result[index].Past_Participle);
+              // eslint-disable-next-line no-param-reassign
+              result[index].Past = '';
+              // eslint-disable-next-line no-param-reassign
+              result[index].Past_Participle = '';
+              // console.log(result);
+            });
+          }
+          console.log(this.$store.state.testData.checkData);
+          this.$store.state.testData.finalData = result;
+          // console.log(this.$store.state.testData.finalData);
           setTimeout(() => {
             this.$store.state.globalFlags.loading = false;
             setTimeout(() => {
@@ -121,7 +201,7 @@ export default {
 <style lang="scss" scoped>
 .conteiner{
   border: 2px solid black;
-  height: 120vh;
+  height: 115vh;
   width: 100%;
   background-color: rgba(237, 200, 243, 0.699);
 }
@@ -190,5 +270,11 @@ export default {
 .firstTransition-enter, .firstTransition-leave-to /* .fade-leave-active below version 2.1.8 */ {
   height: 0;
   border: 0;
+}
+h2{
+  font-size: 30px;
+  @media (min-height: 600px) {
+      font-size: 40px;
+  }
 }
 </style>

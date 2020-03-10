@@ -11,19 +11,19 @@
         <h2>Past Participle</h2>
     </div>
     <div v-for="(item, index) in verbs" v-bind:key="index">
-      <test-element v-bind:element='item'></test-element>
+      <all-element v-bind:element='item'></all-element>
     </div>
     </div>
 </div>
 </template>
 <script>
-import TestElement from './TestElement.vue';
+import AllElement from './Element.vue';
 import BackButton from './BackButton.vue';
 
 export default {
   name: 'ShowAll',
   components: {
-    TestElement, BackButton,
+    AllElement, BackButton,
   },
   data() {
     return {
